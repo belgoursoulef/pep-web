@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>{{ _('Security & Monitoring') }} - {{ _('Car Horizon - Official Website') }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}?v=1.0.3">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}?v=1.0.3">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" defer></script>
+</head>
+<body class="admin-body">
+  
+  <header class="admin-header">
+    <div class="admin-header-title" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <a href="{{ url_for('index') }}" style="text-decoration: none; color: inherit;">
+        CAR<span style="font-weight: 800; color: var(--blue);">HORIZON</span>
+      </a>
+      <span style="color: var(--disabled-black); font-size: 14px; font-weight: 300;">
+        {{ _('Admin Dashboard') }}
+      </span>
+      <a href="{{ url_for('admin_dashboard') }}" class="nav-monitor-link" style="font-size: 14px; color: var(--disabled-black); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
+        <i class="fas fa-arrow-left"></i> {{ _('Back to Dashboard') }}
+      </a>
+    </div>
+    <a class="logout-btn" href="{{ url_for('logout') }}">
+      <i class="fas fa-sign-out-alt"></i> {{ _('Logout') }}
+    </a>
+  </header>
+
+  <main class="admin-content" style="grid-template-columns: 1.1fr 0.9fr;">
+    
+    <!-- Left Column: Video feeds and Thermal status -->
+    <div style="display: flex; flex-direction: column; gap: 30px;">
+      
+      <!-- Video Feeds Section -->
+      <section class="admin-table-card" style="padding: 25px;">
+        <h2 class="admin-section-title" style="margin-bottom: 20px;"><i class="fas fa-video" style="color: var(--blue); margin-right: 8px;"></i>{{ _('Live Monitoring Console') }}</h2>
+        
+        <div class="monitor-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          
+          <!-- Camera 1 -->
+          <div class="cctv-container" style="position: relative; aspect-ratio: 16/9; background: #050505; border: 2px solid #222; border-radius: 8px; overflow: hidden; box-shadow: inset 0 0 30px rgba(0,255,0,0.05);">
+            <div class="cctv-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; padding: 15px; font-family: monospace; color: #00ff66; font-size: 11px; z-index: 10;">
+              <div style="display: flex; justify-content: space-between;">
+                <div>CAM 01: ENTRANCE</div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                  <span class="rec-dot" style="width: 8px; height: 8px; background: red; border-radius: 50%; display: inline-block;"></span> REC
+                </div>
+              </div>
+              <div style="position: absolute; bottom: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between;">
+                <div id="cctv-clock-1">2026-06-17 15:58:00</div>
+                <div>1080P @ 30FPS</div>
+              </div>
+            </div>
+            <!-- Mock static interference and scanlines -->
+            <div class="cctv-scanline"></div>
+            <div class="cctv-static"></div>
+            <div class="cctv-feed-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #444;">
+              <i class="fas fa-door-open" style="font-size: 40px; color: #1a1a1a; margin-bottom: 10px;"></i>
+              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #333;">Security Level Alpha</span>
+            </div>
+          </div>
+          
+          <!-- Camera 2 -->
+          <div class="cctv-container" style="position: relative; aspect-ratio: 16/9; background: #050505; border: 2px solid #222; border-radius: 8px; overflow: hidden; box-shadow: inset 0 0 30px rgba(0,255,0,0.05);">
+            <div class="cctv-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; padding: 15px; font-family: monospace; color: #00ff66; font-size: 11px; z-index: 10;">
+              <div style="display: flex; justify-content: space-between;">
+                <div>CAM 02: SHOWROOM</div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                  <span class="rec-dot" style="width: 8px; height: 8px; background: red; border-radius: 50%; display: inline-block;"></span> REC
+                </div>
+              </div>
+              <div style="position: absolute; bottom: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between;">
+                <div id="cctv-clock-2">2026-06-17 15:58:00</div>
+                <div>1080P @ 30FPS</div>
+              </div>
+            </div>
+            <!-- Mock static interference and scanlines -->
+            <div class="cctv-scanline" style="animation-delay: 2s;"></div>
+            <div class="cctv-static" style="opacity: 0.04;"></div>
+            <div class="cctv-feed-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #444;">
+              <i class="fas fa-car" style="font-size: 40px; color: #1a1a1a; margin-bottom: 10px;"></i>
+              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #333;">Vehicle Storage Zone</span>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Thermal Arduino Status Section -->
+      <section class="admin-table-card" style="padding: 25px;">
+        <h2 class="admin-section-title" style="margin-bottom: 20px;"><i class="fas fa-thermometer-half" style="color: #ff6b6b; margin-right: 8px;"></i>{{ _('Thermal Arduino') }}</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; align-items: center;">
+          <!-- Heat Gauge Display -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div class="temp-readout-circle {% if latest_temp|float > 45 %}temp-alert{% elif latest_temp|float > 30 %}temp-warning{% else %}temp-normal{% endif %}" style="width: 130px; height: 130px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 4px solid; position: relative;">
+              <span style="font-size: 32px; font-weight: 700; font-family: monospace;">{{ latest_temp }}°C</span>
+              <span style="font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--disabled-black);">Sensor Active</span>
+            </div>
+          </div>
+          
+          <!-- Heat Stats and details -->
+          <div>
+            <div style="margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+                <span style="color: var(--disabled-black);">Temperature Status</span>
+                <span class="status-indicator-label {% if latest_temp|float > 45 %}text-alert{% elif latest_temp|float > 30 %}text-warning{% else %}text-normal{% endif %}" style="font-weight: 700;">
+                  {% if latest_temp|float > 45 %}CRITICAL OVERHEAT{% elif latest_temp|float > 30 %}WARNING: HIGH HEAT{% else %}NORMAL RUNNING{% endif %}
+                </span>
+              </div>
+              <!-- Simulated heat level bar -->
+              <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;">
+                <div style="height: 100%; width: {{ (latest_temp|float / 80 * 100)|round }}%; background: {% if latest_temp|float > 45 %}#ff4d4d{% elif latest_temp|float > 30 %}#ffaa00{% else %}#00e676{% endif %}; transition: width 0.5s ease;"></div>
+              </div>
+            </div>
+            <ul style="padding: 0; margin: 0; list-style: none; font-size: 13px; color: var(--disabled-black); display: flex; flex-direction: column; gap: 8px;">
+              <li style="display: flex; justify-content: space-between;">
+                <span>Controller ID:</span>
+                <span style="color: var(--white); font-family: monospace;">ARD-THERM-04X</span>
+              </li>
+              <li style="display: flex; justify-content: space-between;">
+                <span>Firmware:</span>
+                <span style="color: var(--white); font-family: monospace;">v1.4.2-b</span>
+              </li>
+              <li style="display: flex; justify-content: space-between;">
+                <span>Safety Limit:</span>
+                <span style="color: #ff6b6b; font-weight: 600;">45.0°C</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    
+    <!-- Right Column: Logs and Event Simulators -->
+    <div style="display: flex; flex-direction: column; gap: 30px;">
+      
+      <!-- Event Simulators Section -->
+      <section class="admin-form-card" style="padding: 25px;">
+        <h2 class="admin-section-title" style="margin-bottom: 20px;"><i class="fas fa-flask" style="color: var(--blue); margin-right: 8px;"></i>{{ _('Simulate Events') }}</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+          <!-- Camera 1 Simulators -->
+          <div>
+            <span class="form-label" style="margin-bottom: 6px;">Camera 1 (Entrance)</span>
+            <div style="display: flex; gap: 10px;">
+              <form action="{{ url_for('simulate_log') }}" method="POST" style="flex: 1;">
+                <input type="hidden" name="device" value="Camera 1 (Entrance)">
+                <input type="hidden" name="level" value="INFO">
+                <input type="hidden" name="message" value="Motion detected - Person detected at entrance.">
+                <button type="submit" class="form-submit-btn" style="margin: 0; padding: 8px 12px; font-size: 12px; background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.2); color: #00e5ff; font-weight: 500;">
+                  <i class="fas fa-running"></i> Simulate Motion
+                </button>
+              </form>
+              <form action="{{ url_for('simulate_log') }}" method="POST" style="flex: 1;">
+                <input type="hidden" name="device" value="Camera 1 (Entrance)">
+                <input type="hidden" name="level" value="WARNING">
+                <input type="hidden" name="message" value="Camera stream offline - Signal lost.">
+                <button type="submit" class="form-submit-btn" style="margin: 0; padding: 8px 12px; font-size: 12px; background: rgba(255, 170, 0, 0.1); border: 1px solid rgba(255, 170, 0, 0.2); color: #ffaa00; font-weight: 500;">
+                  <i class="fas fa-wifi"></i> Trigger Offline
+                </button>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Camera 2 Simulators -->
+          <div>
+            <span class="form-label" style="margin-bottom: 6px;">Camera 2 (Garage)</span>
+            <div style="display: flex; gap: 10px;">
+              <form action="{{ url_for('simulate_log') }}" method="POST" style="flex: 1;">
+                <input type="hidden" name="device" value="Camera 2 (Garage)">
+                <input type="hidden" name="level" value="INFO">
+                <input type="hidden" name="message" value="Motion detected - Vehicle gate opened.">
+                <button type="submit" class="form-submit-btn" style="margin: 0; padding: 8px 12px; font-size: 12px; background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.2); color: #00e5ff; font-weight: 500;">
+                  <i class="fas fa-car"></i> Simulate Gate Open
+                </button>
+              </form>
+              <form action="{{ url_for('simulate_log') }}" method="POST" style="flex: 1;">
+                <input type="hidden" name="device" value="Camera 2 (Garage)">
+                <input type="hidden" name="level" value="INFO">
+                <input type="hidden" name="message" value="Lighting adjusted - Night vision enabled.">
+                <button type="submit" class="form-submit-btn" style="margin: 0; padding: 8px 12px; font-size: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--white); font-weight: 500;">
+                  <i class="fas fa-moon"></i> Night Mode
+                </button>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Thermal Arduino Simulators -->
+          <div>
+            <span class="form-label" style="margin-bottom: 6px;">Thermal Arduino</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+              <form action="{{ url_for('simulate_log') }}" method="POST">
+                <input type="hidden" name="device" value="Thermal Arduino">
+                <input type="hidden" name="level" value="INFO">
+                <input type="hidden" name="message" value="Temperature stabilized to 22.1°C.">
+                <button type="submit" class="form-submit-btn" style="margin: 0; padding: 8px 6px; font-size: 11px; background: rgba(0, 230, 118, 0.1); border: 1px solid rgba(0, 230, 118, 0.2); color: #00e676; font-weight: 500;">
+                  22°C (Normal)
+                </button>
+              </form>
+              <form action="{{ url_for('simulate_log') }}" method="POST">
+                <input type="hidden" name="device" value="Thermal Arduino">
+                <input type="hidden" name="level" value="WARNING">
+                <input type="hidden" name="message" value="High temperature warning - 39.5°C detected.">
+                <button type="submit" class="form-submit-btn" style="margin: 0; padding: 8px 6px; font-size: 11px; background: rgba(255, 170, 0, 0.1); border: 1px solid rgba(255, 170, 0, 0.2); color: #ffaa00; font-weight: 500;">
+                  39.5°C (Warn)
+                </button>
+              </form>
+              <form action="{{ url_for('simulate_log') }}" method="POST">
+                <input type="hidden" name="device" value="Thermal Arduino">
+                <input type="hidden" name="level" value="ALERT">
+                <input type="hidden" name="message" value="CRITICAL HEAT SPIKE - 58.7°C detected! Cooling fan activated.">
+                <button type="submit" class="form-submit-btn" style="margin: 0; padding: 8px 6px; font-size: 11px; background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.2); color: #ff4d4d; font-weight: 500;">
+                  58.7°C (Alert)
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Logs Section -->
+      <section class="admin-table-card" style="padding: 25px; flex: 1; min-height: 400px; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+          <h2 class="admin-section-title" style="margin: 0;"><i class="fas fa-list-alt" style="color: var(--blue); margin-right: 8px;"></i>{{ _('System Logs') }}</h2>
+          <!-- Device filter selector -->
+          <div style="display: flex; gap: 5px;">
+            <button class="filter-btn active" onclick="filterLogs('all')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: var(--white); cursor: pointer; transition: all 0.2s;">All</button>
+            <button class="filter-btn" onclick="filterLogs('Camera 1')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: var(--disabled-black); cursor: pointer; transition: all 0.2s;">Cam 1</button>
+            <button class="filter-btn" onclick="filterLogs('Camera 2')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: var(--disabled-black); cursor: pointer; transition: all 0.2s;">Cam 2</button>
+            <button class="filter-btn" onclick="filterLogs('Thermal')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: var(--disabled-black); cursor: pointer; transition: all 0.2s;">Thermal</button>
+          </div>
+        </div>
+        
+        <!-- Logs Table -->
+        <div class="table-responsive" style="flex: 1; max-height: 420px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 140px;">Time</th>
+                <th style="width: 140px;">Device</th>
+                <th style="width: 80px;">Level</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in logs %}
+              <tr class="log-row" data-device="{{ log.device_name }}">
+                <td style="font-family: monospace; font-size: 12px; color: var(--disabled-black);">{{ log.formatted_time }}</td>
+                <td style="font-size: 12px; font-weight: 600;">{{ log.device_name }}</td>
+                <td>
+                  <span class="log-level-badge log-level-{{ log.log_level|lower }}">
+                    {{ log.log_level }}
+                  </span>
+                </td>
+                <td style="font-size: 13px; font-weight: 300;">{{ log.message }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+    
+  </main>
+
+  <script>
+    // Live ticking clocks for CCTV overlays
+    function updateCctvClocks() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const timeStr = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      
+      document.getElementById('cctv-clock-1').textContent = timeStr;
+      document.getElementById('cctv-clock-2').textContent = timeStr;
+    }
+    
+    setInterval(updateCctvClocks, 1000);
+    updateCctvClocks();
+    
+    // Quick log filtering by device
+    function filterLogs(deviceFilter) {
+      const rows = document.querySelectorAll('.log-row');
+      const buttons = document.querySelectorAll('.filter-btn');
+      
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.color = 'var(--disabled-black)';
+      });
+      
+      // Highlight correct button
+      event.target.classList.add('active');
+      event.target.style.color = 'var(--white)';
+      
+      rows.forEach(row => {
+        const deviceAttr = row.getAttribute('data-device');
+        if (deviceFilter === 'all') {
+          row.style.display = '';
+        } else if (deviceFilter === 'Camera 1' && deviceAttr.includes('Camera 1')) {
+          row.style.display = '';
+        } else if (deviceFilter === 'Camera 2' && deviceAttr.includes('Camera 2')) {
+          row.style.display = '';
+        } else if (deviceFilter === 'Thermal' && deviceAttr.includes('Thermal')) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

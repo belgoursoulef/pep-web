@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>{{ _('Car Horizon - Official Website') }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}?v=1.0.2">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" defer></script>
+  <script src="{{ url_for('static', filename='js/pixel-anchor-observer.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/catalog-filter.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/rss_parser.js') }}" defer></script>
+</head>
+
+<body>
+  <!-- Dynamic RSS News Ticker Banner -->
+  <div class="news-ticker-banner" id="news-ticker">
+    <div class="ticker-label">
+      <i class="fas fa-rss"></i> {{ _("LATEST NEWS") }}
+    </div>
+    <div class="ticker-wrap">
+      <div class="ticker-content" id="ticker-items">
+        <!-- Dynamic items injected here -->
+      </div>
+    </div>
+  </div>
+
+  <div id="pixel-anchor"></div>
+
+  <header>
+    <div class="wrapper-fixed">
+      <nav class="main-nav">
+        <ul class="nav-izq">
+          <li><a href="#">{{ _('Models') }}</a></li>
+        </ul>
+        <ul class="nav-der">
+          <li style="margin-right: 10px;"><a href="?lang=en" {% if current_lang=='en'
+              %}style="color: var(--blue); font-weight: 800;" {% endif %}>EN</a></li>
+          <li style="margin-right: 15px;"><a href="?lang=fr" {% if current_lang=='fr'
+              %}style="color: var(--blue); font-weight: 800;" {% endif %}>FR</a></li>
+          <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-user fa-lg"></i></a></li>
+          <li id="logo">
+            <a href="#"
+              style="font-size: 20px; font-weight: 800; letter-spacing: 2px; display: flex; align-items: center; text-transform: uppercase; text-decoration: none; color: inherit; height: 100%;">
+              CAR<span style="font-weight: 300; color: var(--blue); margin-left: 4px;">HORIZON</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="wrapper-lema">
+        <p class="lema">{{ _('Do you like') }} <strong>{{ _('driving?') }}</strong></p>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-video-wrapper">
+        <video class="hero-video-bg" autoplay muted loop playsinline>
+          <source src="{{ url_for('static', filename='assets/banner.mp4') }}" type="video/mp4">
+        </video>
+      </div>
+      <div class="hero-content" style="position: relative; z-index: 1;">
+        <h2>{{ _('LEGENDARY HORIZONS') }}</h2>
+        <p>{{ _('Experience the ultimate collection of automotive masterpieces.') }}</p>
+        <a href="#models-section">{{ _('Explore Collection') }}</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="models main-wrapper" id="models-section">
+      <!-- Catalog Header -->
+      <div class="catalog-header-wrapper">
+        <div class="catalog-title-section">
+          <h1>{{ _("Discover all models") }}</h1>
+          <p>{{ _("Explore the entire range") }}</p>
+        </div>
+        <div class="sort-container">
+          <select class="sort-select">
+            <option value="default">{{ _("Default sorting") }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Catalog Main Grid -->
+      <div class="catalog-container">
+
+        <!-- Left Sidebar Filters -->
+        <aside class="catalog-sidebar">
+
+          <!-- Categories -->
+          <div class="filter-group">
+            <div class="filter-section-title">
+              <span>{{ _("Categories") }}</span>
+              <i class="fas fa-chevron-up"></i>
+            </div>
+            <div class="filter-grid-2x3">
+              <!-- SUV -->
+              <div class="filter-box" data-filter-category="suv">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M2,16 L3,11 L6,10 L16,10 L19,11 L22,15 L22,17 L2,17 Z M5,17 A2,2 0 1,1 5,21 A2,2 0 1,1 5,17 M17,17 A2,2 0 1,1 17,21 A2,2 0 1,1 17,17" />
+                </svg>
+                <span>{{ _("SUV") }}</span>
+              </div>
+              <!-- Break -->
+              <div class="filter-box" data-filter-category="break">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M2,16 L3,11 L18,10 L20,11 L22,14 L22,17 L2,17 Z M5,17 A2,2 0 1,1 5,21 A2,2 0 1,1 5,17 M17,17 A2,2 0 1,1 17,21 A2,2 0 1,1 17,17" />
+                </svg>
+                <span>{{ _("Estate") }}</span>
+              </div>
+              <!-- Berline -->
+              <div class="filter-box" data-filter-category="berline">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M2,16 L4,11 L7,10 L15,10 L18,11 L22,15 L22,17 L2,17 Z M6,17 A2,2 0 1,1 6,21 A2,2 0 1,1 6,17 M16,17 A2,2 0 1,1 16,21 A2,2 0 1,1 16,17" />
+                </svg>
+                <span>{{ _("Saloon") }}</span>
+              </div>
+              <!-- Coupé -->
+              <div class="filter-box" data-filter-category="coupe">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M2,16 L5,11 L15,10 L18,11 L22,16 L2,16 Z M6,16 A2,2 0 1,1 6,20 A2,2 0 1,1 6,16 M16,16 A2,2 0 1,1 16,20 A2,2 0 1,1 16,16" />
+                </svg>
+                <span>{{ _("Coupé") }}</span>
+              </div>
+              <!-- Compacte -->
+              <div class="filter-box" data-filter-category="compacte">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M3,16 L4,12 L8,11 L14,11 L16,12 L21,16 L3,16 Z M6,16 A2,2 0 1,1 6,20 A2,2 0 1,1 6,16 M15,16 A2,2 0 1,1 15,20 A2,2 0 1,1 15,16" />
+                </svg>
+                <span>{{ _("Compact") }}</span>
+              </div>
+              <!-- Cabriolet -->
+              <div class="filter-box" data-filter-category="cabriolet">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M2,16 L4,13 L14,13 L17,14 L22,16 L2,16 Z M6,16 A2,2 0 1,1 6,20 A2,2 0 1,1 6,16 M16,16 A2,2 0 1,1 16,20 A2,2 0 1,1 16,16" />
+                </svg>
+                <span>{{ _("Convertible") }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Brands -->
+          <div class="filter-group">
+            <div class="filter-section-title">
+              <span>{{ _("Brands") }}</span>
+              <i class="fas fa-chevron-up"></i>
+            </div>
+            <div class="filter-brands-list">
+              <button class="brand-btn active" data-filter-brand="all">{{ _("All") }}</button>
+              {% for brand in brands %}
+              <button class="brand-btn" data-filter-brand="{{ brand }}">{{ brand }}</button>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Motorisations -->
+          <div class="filter-group">
+            <div class="filter-section-title">
+              <span>{{ _("Engines") }}</span>
+              <i class="fas fa-chevron-up"></i>
+            </div>
+            <div class="filter-grid-2x3">
+              <!-- Electric -->
+              <div class="filter-box" data-filter-engine="electric">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M13,2 L3,14 L12,14 L11,22 L21,10 L12,10 Z" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                <span>{{ _("100% electric") }}</span>
+              </div>
+              <!-- Hybrid -->
+              <div class="filter-box" data-filter-engine="hybrid">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="10" stroke-width="2" />
+                  <path d="M12,2 A10,10 0 0,1 22,12" stroke-width="2" />
+                </svg>
+                <span>{{ _("Plug-in hybrid") }}</span>
+              </div>
+              <!-- Petrol -->
+              <div class="filter-box" data-filter-engine="petrol">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M3 22h18M12 2v20M5 7h14M8 12h8" stroke-width="2" />
+                </svg>
+                <span>{{ _("Petrol") }}</span>
+              </div>
+              <!-- Diesel -->
+              <div class="filter-box" data-filter-engine="diesel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M19 5v14M5 5v14M5 12h14" stroke-width="2" />
+                </svg>
+                <span>{{ _("Diesel") }}</span>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+        <!-- Right Content Area -->
+        <main class="catalog-content-area">
+          <div class="catalog-section-header">
+            <i class="fas fa-piggy-bank"></i>
+            <span>{{ _("Exclusive offers") }} (<span id="results-count">{{ cars|length }}</span>)</span>
+          </div>
+
+          <div class="models-view">
+            {% for car in cars %}
+            <article data-brand="{{ car.brand }}" data-category="{{ car.category }}" data-fuel="{{ car.fuel_type }}" {%
+              if car.sketchfab_id %} data-sketchfab-id="{{ car.sketchfab_id }}" {% endif %}>
+              <!-- Badges -->
+              <div class="card-badges">
+                <span class="badge badge-light">{{ _(car.category|capitalize) }}</span>
+                {% if car.is_exclusive %}
+                <span class="badge badge-dark">{{ _("Exclusive offers") }}</span>
+                {% endif %}
+              </div>
+
+              <!-- Brand & Name -->
+              <div class="card-title-block">
+                <div class="card-brand-model">
+                  {% if car.brand|lower in brands_with_logos %}
+                  <img class="brand-logo-img logo-{{ car.brand|lower|replace(' ', '') }}"
+                    src="{{ url_for('static', filename='assets/' ~ car.brand|lower|replace(' ', '') ~ '_logo.png') }}"
+                    alt="{{ car.brand }}">
+                  {% else %}
+                  <span class="car-brand-label">{{ car.brand }}</span>
+                  {% endif %}
+                  <h2 class="model-title">{{ car.name }}</h2>
+                </div>
+              </div>
+
+              <!-- Image Container -->
+              <div class="card-image-container {% if car.sketchfab_id %}has-3d{% endif %}" {% if car.sketchfab_id %}
+                data-sketchfab-id="{{ car.sketchfab_id }}" data-car-name="{{ car.brand }} {{ car.name }}" {% endif %}>
+                <img class="card-car-image" src="{{ url_for('static', filename=car.image_path) }}"
+                  alt="{{ car.brand }} {{ car.name }}">
+                {% if car.sketchfab_id %}
+                <div class="hover-3d-overlay">
+                  <div class="overlay-3d-badge">
+                    <i class="fas fa-cube"></i>
+                    <span>{{ _("View in 3D") }}</span>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Price & Lease info -->
+              <div class="card-pricing-block">
+                <div class="engine-tag">
+                  {% if car.fuel_type == 'electric' %}
+                  <i class="fas fa-bolt"></i> {{ _("100% electric") }}
+                  {% elif car.fuel_type == 'hybrid' %}
+                  <i class="fas fa-leaf"></i> {{ _("Plug-in hybrid") }}
+                  {% elif car.fuel_type == 'diesel' %}
+                  <i class="fas fa-oil-can"></i> {{ _("Diesel") }}
+                  {% else %}
+                  <i class="fas fa-gas-pump"></i> {{ _("Petrol") }}
+                  {% endif %}
+                </div>
+                <div class="price-text">{{ car.price }}</div>
+                <div class="lease-info">{{ car.lease_info }}</div>
+              </div>
+
+              <!-- Action CTAs -->
+              <div class="card-cta-links">
+                <a class="card-link primary" href="{{ url_for('car_detail', car_id=car.id) }}">{{ _("Learn More") }}</a>
+                {% if car.sketchfab_id %}
+                <a class="card-link secondary trigger-3d-modal" href="#" data-sketchfab-id="{{ car.sketchfab_id }}"
+                  data-car-name="{{ car.brand }} {{ car.name }}">
+                  <i class="fas fa-cube"></i> {{ _("Explore") }}
+                </a>
+                {% else %}
+                <a class="card-link secondary" href="#">{{ _("Explore") }}</a>
+                {% endif %}
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </main>
+
+      </div>
+    </section>
+
+  <footer class="footer-minimal">
+    <div class="main-wrapper footer-minimal-wrapper">
+      <p class="copy">© Car Horizon 2026</p>
+      <ul class="footer-minimal-links">
+        <li><a href="#">{{ _('Legal notice') }}</a></li>
+        <li><a href="#">{{ _('Privacy policy') }}</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <div id="demo-3d-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+      <div class="modal-header">
+        <h3 id="modal-car-title">Car Name</h3>
+      </div>
+      <div class="modal-body">
+        <div class="iframe-container">
+          <div class="modal-spinner">
+            <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

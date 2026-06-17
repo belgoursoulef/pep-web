@@ -1,0 +1,58 @@
+/* Minimal Footer Stylesheet */
+
+.footer-minimal {
+  background-color: #111;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 40px 0;
+  color: #888;
+  font-family: inherit;
+}
+
+.footer-minimal-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-minimal-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-minimal-links a {
+  text-decoration: none;
+  color: #888;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.footer-minimal-links a:hover {
+  color: var(--white);
+}
+
+.copy {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: #555;
+}
+
+@media (max-width: 600px) {
+  .footer-minimal-wrapper {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .footer-minimal-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

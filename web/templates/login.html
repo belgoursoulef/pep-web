@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>{{ _('Admin Login') }} - {{ _('Car Horizon - Official Website') }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}?v=1.0.3">
+</head>
+<body class="admin-body">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h2 class="login-title">{{ _('Admin Login') }}</h2>
+      
+      {% if error %}
+      <div class="login-error">
+        {{ _(error) }}
+      </div>
+      {% endif %}
+      
+      <form action="{{ url_for('login') }}" method="POST">
+        <div class="login-form-group">
+          <label class="login-label" for="username">{{ _('Username') }}</label>
+          <input class="login-input" type="text" id="username" name="username" required autocomplete="username">
+        </div>
+        <div class="login-form-group">
+          <label class="login-label" for="password">{{ _('Password') }}</label>
+          <input class="login-input" type="password" id="password" name="password" required autocomplete="current-password">
+        </div>
+        <button class="login-btn" type="submit">{{ _('Log In') }}</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

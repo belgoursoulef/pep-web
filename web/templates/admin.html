@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>{{ _('Admin Dashboard') }} - {{ _('Car Horizon - Official Website') }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}?v=1.0.3">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" defer></script>
+</head>
+<body class="admin-body">
+  
+  <header class="admin-header">
+    <div class="admin-header-title" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <a href="{{ url_for('index') }}" style="text-decoration: none; color: inherit;">
+        CAR<span style="font-weight: 800; color: var(--blue);">HORIZON</span>
+      </a>
+      <span style="color: var(--disabled-black); font-size: 14px; font-weight: 300;">
+        {{ _('Admin Dashboard') }}
+      </span>
+      <a href="{{ url_for('admin_monitoring') }}" class="nav-monitor-link" style="font-size: 14px; color: var(--blue); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
+        <i class="fas fa-video"></i> {{ _('Security & Monitoring') }}
+      </a>
+    </div>
+    <a class="logout-btn" href="{{ url_for('logout') }}">
+      <i class="fas fa-sign-out-alt"></i> {{ _('Logout') }}
+    </a>
+  </header>
+
+  <main class="admin-content">
+    
+    <!-- Left Section: Active Models -->
+    <section class="admin-table-card">
+      <h2 class="admin-section-title">{{ _('Models') }}</h2>
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{{ _('Brand') }}</th>
+              <th>{{ _('Name') }}</th>
+              <th>{{ _('Category') }}</th>
+              <th>{{ _('Engine Type') }}</th>
+              <th>{{ _('Price (EN)') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for car in cars %}
+            <tr>
+              <td>{{ car.id }}</td>
+              <td><strong>{{ car.brand }}</strong></td>
+              <td>{{ car.name }}</td>
+              <td>{{ _(car.category|capitalize) }}</td>
+              <td>
+                <span class="car-badge car-badge-{{ car.fuel_type }}">
+                  {{ _(car.fuel_type|replace('-', ' ')|capitalize) if car.fuel_type == 'electric' or car.fuel_type == 'hybrid' or car.fuel_type == 'petrol' or car.fuel_type == 'diesel' else car.fuel_type }}
+                </span>
+              </td>
+              <td>{{ car.price_en }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Right Section: Add Model Form -->
+    <section class="admin-form-card">
+      <h2 class="admin-section-title">{{ _('Add New Model') }}</h2>
+      <form action="{{ url_for('add_car') }}" method="POST">
+        
+        <div class="form-grid-2col">
+          
+          <div>
+            <label class="form-label" for="brand">{{ _('Brand') }}</label>
+            <input class="form-input" type="text" id="brand" name="brand" required placeholder="e.g. Toyota">
+          </div>
+
+          <div>
+            <label class="form-label" for="name">{{ _('Name') }}</label>
+            <input class="form-input" type="text" id="name" name="name" required placeholder="e.g. Supra MK4 (A80)">
+          </div>
+
+          <div>
+            <label class="form-label" for="category">{{ _('Category') }}</label>
+            <select class="form-select" id="category" name="category" required>
+              <option value="suv">{{ _('SUV') }}</option>
+              <option value="break">{{ _('Estate') }}</option>
+              <option value="berline">{{ _('Saloon') }}</option>
+              <option value="coupe" selected>{{ _('Coupé') }}</option>
+              <option value="compacte">{{ _('Compact') }}</option>
+              <option value="cabriolet">{{ _('Convertible') }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label" for="fuel_type">{{ _('Engine Type') }}</label>
+            <select class="form-select" id="fuel_type" name="fuel_type" required>
+              <option value="petrol" selected>{{ _('Petrol') }}</option>
+              <option value="diesel">{{ _('Diesel') }}</option>
+              <option value="electric">{{ _('100% electric') }}</option>
+              <option value="hybrid">{{ _('Plug-in hybrid') }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label" for="price_en">{{ _('Price (EN)') }}</label>
+            <input class="form-input" type="text" id="price_en" name="price_en" required placeholder="e.g. $650/month">
+          </div>
+
+          <div>
+            <label class="form-label" for="price_fr">{{ _('Price (FR)') }}</label>
+            <input class="form-input" type="text" id="price_fr" name="price_fr" required placeholder="e.g. 650 €/mois">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="lease_info_en">{{ _('Lease Info (EN)') }}</label>
+            <input class="form-input" type="text" id="lease_info_en" name="lease_info_en" placeholder="e.g. Classic sports lease, 36 mos.">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="lease_info_fr">{{ _('Lease Info (FR)') }}</label>
+            <input class="form-input" type="text" id="lease_info_fr" name="lease_info_fr" placeholder="e.g. Loyer sportif classique, 36 mois.">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="image_path">{{ _('Image Path') }}</label>
+            <input class="form-input" type="text" id="image_path" name="image_path" required value="assets/supra.png" placeholder="e.g. assets/supra.png">
+          </div>
+
+          <div>
+            <label class="form-label" for="sketchfab_id">{{ _('Sketchfab ID') }}</label>
+            <input class="form-input" type="text" id="sketchfab_id" name="sketchfab_id" placeholder="Optional 3D model hash">
+          </div>
+
+          <div>
+            <label class="checkbox-label">
+              <input class="checkbox-input" type="checkbox" id="is_exclusive" name="is_exclusive" value="1">
+              {{ _('Exclusive Offer') }}
+            </label>
+          </div>
+
+          <!-- Specifications Row Divider -->
+          <div class="form-group-full" style="border-top: 1px solid rgba(255,255,255,0.08); margin: 20px 0 10px 0; padding-top: 20px;">
+            <h3 style="font-size: 16px; font-weight: 300; text-transform: uppercase; color: var(--blue); letter-spacing: 1px;">
+              {{ _('Extended specifications') }}
+            </h3>
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="spec_paint">{{ _('Exterior Paint') }}</label>
+            <input class="form-input" type="text" id="spec_paint" name="spec_paint" required placeholder="e.g. Renaissance Red / Absolute Zero White">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="spec_wheels">{{ _('Wheels') }}</label>
+            <input class="form-input" type="text" id="spec_wheels" name="spec_wheels" required placeholder="e.g. 19-inch forged alloy wheels">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="spec_chassis">{{ _('Chassis Materials') }}</label>
+            <input class="form-input" type="text" id="spec_chassis" name="spec_chassis" required placeholder="e.g. High-tensile steel and aluminum chassis">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="spec_dimensions">{{ _('Dimensions & Wheelbase') }}</label>
+            <input class="form-input" type="text" id="spec_dimensions" name="spec_dimensions" required placeholder="e.g. 2,470 mm wheelbase">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="spec_fuel">{{ _('Fuel Tank Capacity') }}</label>
+            <input class="form-input" type="text" id="spec_fuel" name="spec_fuel" required placeholder="e.g. 52 Liters (13.7 gal)">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="spec_brakes">{{ _('Stopping Distance') }}</label>
+            <input class="form-input" type="text" id="spec_brakes" name="spec_brakes" required placeholder="e.g. 31 meters (100-0 km/h)">
+          </div>
+
+        </div>
+
+        <button class="form-submit-btn" type="submit">
+          <i class="fas fa-plus"></i> {{ _('Add Car') }}
+        </button>
+
+      </form>
+    </section>
+
+  </main>
+
+</body>
+</html>

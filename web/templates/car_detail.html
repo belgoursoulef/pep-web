@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>{{ car.brand }} {{ car.name }} - {{ _('Car Horizon - Official Website') }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}?v=1.0.2">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" defer></script>
+  <script src="{{ url_for('static', filename='js/rss_parser.js') }}" defer></script>
+</head>
+
+<body>
+  <!-- Dynamic RSS News Ticker Banner -->
+  <div class="news-ticker-banner" id="news-ticker">
+    <div class="ticker-label">
+      <i class="fas fa-rss"></i> {{ _("LATEST NEWS") }}
+    </div>
+    <div class="ticker-wrap">
+      <div class="ticker-content" id="ticker-items">
+        <!-- Dynamic items injected here -->
+      </div>
+    </div>
+  </div>
+
+  <div id="pixel-anchor"></div>
+
+  <header style="background: var(--black);">
+    <div class="wrapper-fixed" style="position: relative;">
+      <nav class="main-nav">
+        <ul class="nav-izq">
+          <li><a href="{{ url_for('index') }}#models-section">{{ _('Models') }}</a></li>
+        </ul>
+        <ul class="nav-der">
+          <li style="margin-right: 10px;"><a href="?lang=en" {% if current_lang=='en'
+              %}style="color: var(--blue); font-weight: 800;" {% endif %}>EN</a></li>
+          <li style="margin-right: 15px;"><a href="?lang=fr" {% if current_lang=='fr'
+              %}style="color: var(--blue); font-weight: 800;" {% endif %}>FR</a></li>
+          <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-user fa-lg"></i></a></li>
+          <li id="logo">
+            <a href="{{ url_for('index') }}"
+              style="font-size: 20px; font-weight: 800; letter-spacing: 2px; display: flex; align-items: center; text-transform: uppercase; text-decoration: none; color: inherit; height: 100%;">
+              CAR<span style="font-weight: 300; color: var(--blue); margin-left: 4px;">HORIZON</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="detail-main main-wrapper">
+    <!-- Breadcrumb / Back Link -->
+    <div class="back-link-wrapper">
+      <a href="{{ url_for('index') }}#models-section" class="back-btn">
+        <i class="fas fa-arrow-left"></i> {{ _("Back to models") }}
+      </a>
+    </div>
+
+    <div class="detail-container">
+      <!-- Media Viewport -->
+      <div class="detail-viewport-column">
+        {% if car.sketchfab_id %}
+        <div class="detail-3d-wrapper">
+          <div class="detail-3d-header">
+            <span><i class="fas fa-cube"></i> {{ _("Interactive 3D View") }}</span>
+          </div>
+          <div class="iframe-3d-container">
+            <iframe title="{{ car.brand }} {{ car.name }}" frameborder="0" allowfullscreen mozallowfullscreen="true"
+              webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+              execution-while-out-of-viewport execution-while-not-rendered web-share
+              src="https://sketchfab.com/models/{{ car.sketchfab_id }}/embed?autostart=1&preload=1&ui_controls=1">
+            </iframe>
+          </div>
+        </div>
+        {% else %}
+        <div class="detail-image-wrapper">
+          <img class="detail-car-image" src="{{ url_for('static', filename=car.image_path) }}"
+            alt="{{ car.brand }} {{ car.name }}">
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Info Block -->
+      <div class="detail-info-column">
+        <div class="detail-header-block">
+          <div class="brand-line">
+            <span class="detail-brand-label">{{ car.brand }}</span>
+            <span class="badge badge-light">{{ _(car.category|capitalize) }}</span>
+          </div>
+          <h1 class="detail-car-name">{{ car.name }}</h1>
+        </div>
+
+        <div class="detail-pricing-block">
+          <div class="detail-price">{{ car.price }}</div>
+          <div class="detail-lease">{{ car.lease_info }}</div>
+        </div>
+
+        <div class="detail-specs-grid">
+          <div class="spec-item">
+            <div class="spec-icon"><i class="fas fa-gas-pump"></i></div>
+            <div class="spec-label">{{ _("Engine Type") }}</div>
+            <div class="spec-value">
+              {% if car.fuel_type == 'electric' %}
+              {{ _("100% electric") }}
+              {% elif car.fuel_type == 'hybrid' %}
+              {{ _("Plug-in hybrid") }}
+              {% elif car.fuel_type == 'diesel' %}
+              {{ _("Diesel") }}
+              {% else %}
+              {{ _("Petrol") }}
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="spec-item">
+            <div class="spec-icon"><i class="fas fa-cogs"></i></div>
+            <div class="spec-label">{{ _("Transmission") }}</div>
+            <div class="spec-value">
+              {% if car.category == 'coupe' or car.brand == 'Ferrari' or car.brand == 'Red Bull' %}
+              {{ _("Manual 6-Speed / Sequential") }}
+              {% else %}
+              {{ _("Automatic 8-Speed") }}
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="spec-item">
+            <div class="spec-icon"><i class="fas fa-tachometer-alt"></i></div>
+            <div class="spec-label">{{ _("Top Speed") }}</div>
+            <div class="spec-value">
+              {% if car.brand == 'Ferrari' %}
+              324 km/h
+              {% elif car.brand == 'Red Bull' %}
+              350+ km/h
+              {% elif car.brand == 'Porsche' %}
+              260 km/h
+              {% else %}
+              250 km/h (Limited)
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="spec-item">
+            <div class="spec-icon"><i class="fas fa-road"></i></div>
+            <div class="spec-label">{{ _("Drivetrain") }}</div>
+            <div class="spec-value">
+              {% if car.category == 'suv' %}
+              AWD (All-Wheel Drive)
+              {% else %}
+              RWD (Rear-Wheel Drive)
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-cta-block">
+          <button class="cta-btn primary" style="border: none; cursor: pointer;">{{ _("Call dealer for more information") }}</button>
+          <a href="#" class="cta-btn secondary">{{ _("Request an offer") }}</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Extended Specifications Section -->
+    {% if extended_specs %}
+    <div class="detail-specs-extended">
+      <h2 class="extended-specs-title">{{ _("Extended specifications") }}</h2>
+      <div class="specs-elements-grid">
+        {% for spec in extended_specs %}
+        <div class="spec-element-card">
+          <img class="spec-element-thumb" src="{{ url_for('static', filename='assets/' ~ spec.img) }}"
+            alt="{{ _(spec.title) }}">
+          <div class="spec-element-info">
+            <span class="spec-element-title">{{ _(spec.title) }}</span>
+            <span class="spec-element-value">{{ _(spec.value) }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </main>
+
+  <footer class="footer-minimal">
+    <div class="main-wrapper footer-minimal-wrapper">
+      <p class="copy">© Car Horizon 2026</p>
+      <ul class="footer-minimal-links">
+        <li><a href="#">{{ _('Legal notice') }}</a></li>
+        <li><a href="#">{{ _('Privacy policy') }}</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+
+</html>
