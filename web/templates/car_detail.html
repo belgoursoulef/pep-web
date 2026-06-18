@@ -156,7 +156,7 @@
 
         <div class="detail-cta-block">
           <button class="cta-btn primary" style="border: none; cursor: pointer;">{{ _("Call dealer for more information") }}</button>
-          <a href="#" class="cta-btn secondary">{{ _("Request an offer") }}</a>
+          <a href="{{ url_for('static', filename='assets/presentation_keywords.pdf') }}" class="cta-btn secondary" download>{{ _("Download the full specifications") }}</a>
         </div>
       </div>
     </div>

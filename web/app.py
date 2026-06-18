@@ -67,7 +67,7 @@ UI_TRANSLATIONS = {
     "Do you like": {"en": "Do you like", "fr": "Aimez-vous"},
     "driving?": {"en": "driving?", "fr": "conduire?"},
     "Explore": {"en": "Explore", "fr": "Explorer"},
-    "Request an offer": {"en": "Request an offer", "fr": "Demander une offre"},
+    "Download the full specifications": {"en": "Download the full specifications", "fr": "Télécharger la fiche technique complète"},
     
     # Footer UI
     "Legal notice": {"en": "Legal notice", "fr": "Mentions légales"},
