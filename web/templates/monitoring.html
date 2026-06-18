@@ -37,51 +37,51 @@
       <section class="admin-table-card" style="padding: 25px;">
         <h2 class="admin-section-title" style="margin-bottom: 20px;"><i class="fas fa-video" style="color: var(--blue); margin-right: 8px;"></i>{{ _('Live Monitoring Console') }}</h2>
         
-        <div class="monitor-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="monitor-grid" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
           
           <!-- Camera 1 -->
           <div class="cctv-container" style="position: relative; aspect-ratio: 16/9; background: #050505; border: 2px solid #222; border-radius: 8px; overflow: hidden; box-shadow: inset 0 0 30px rgba(0,255,0,0.05);">
-            <div class="cctv-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; padding: 15px; font-family: monospace; color: #00ff66; font-size: 11px; z-index: 10;">
+            <div class="cctv-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; padding: 20px; font-family: monospace; color: #00ff66; font-size: 13px; z-index: 10;">
               <div style="display: flex; justify-content: space-between;">
-                <div>CAM 01: ENTRANCE</div>
-                <div style="display: flex; align-items: center; gap: 5px;">
-                  <span class="rec-dot" style="width: 8px; height: 8px; background: red; border-radius: 50%; display: inline-block;"></span> REC
+                <div style="font-weight: 700; letter-spacing: 1px;">CAM 01: ENTRANCE</div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="rec-dot" style="width: 10px; height: 10px; background: red; border-radius: 50%; display: inline-block; animation: blink 1s infinite;"></span> REC
                 </div>
               </div>
-              <div style="position: absolute; bottom: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between;">
-                <div id="cctv-clock-1">2026-06-17 15:58:00</div>
-                <div>1080P @ 30FPS</div>
+              <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between;">
+                <div id="cctv-clock-1" style="font-weight: 600;">2026-06-17 15:58:00</div>
+                <div style="font-weight: 600;">1080P @ 30FPS</div>
               </div>
             </div>
             <!-- Mock static interference and scanlines -->
             <div class="cctv-scanline"></div>
             <div class="cctv-static"></div>
             <div class="cctv-feed-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #444;">
-              <i class="fas fa-door-open" style="font-size: 40px; color: #1a1a1a; margin-bottom: 10px;"></i>
-              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #333;">Security Level Alpha</span>
+              <i class="fas fa-door-open" style="font-size: 64px; color: #1a1a1a; margin-bottom: 15px;"></i>
+              <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: #333; font-weight: 600;">Security Level Alpha</span>
             </div>
           </div>
           
           <!-- Camera 2 -->
           <div class="cctv-container" style="position: relative; aspect-ratio: 16/9; background: #050505; border: 2px solid #222; border-radius: 8px; overflow: hidden; box-shadow: inset 0 0 30px rgba(0,255,0,0.05);">
-            <div class="cctv-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; padding: 15px; font-family: monospace; color: #00ff66; font-size: 11px; z-index: 10;">
+            <div class="cctv-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; padding: 20px; font-family: monospace; color: #00ff66; font-size: 13px; z-index: 10;">
               <div style="display: flex; justify-content: space-between;">
-                <div>CAM 02: SHOWROOM</div>
-                <div style="display: flex; align-items: center; gap: 5px;">
-                  <span class="rec-dot" style="width: 8px; height: 8px; background: red; border-radius: 50%; display: inline-block;"></span> REC
+                <div style="font-weight: 700; letter-spacing: 1px;">CAM 02: SHOWROOM</div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="rec-dot" style="width: 10px; height: 10px; background: red; border-radius: 50%; display: inline-block; animation: blink 1s infinite;"></span> REC
                 </div>
               </div>
-              <div style="position: absolute; bottom: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between;">
-                <div id="cctv-clock-2">2026-06-17 15:58:00</div>
-                <div>1080P @ 30FPS</div>
+              <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between;">
+                <div id="cctv-clock-2" style="font-weight: 600;">2026-06-17 15:58:00</div>
+                <div style="font-weight: 600;">1080P @ 30FPS</div>
               </div>
             </div>
             <!-- Mock static interference and scanlines -->
             <div class="cctv-scanline" style="animation-delay: 2s;"></div>
             <div class="cctv-static" style="opacity: 0.04;"></div>
             <div class="cctv-feed-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #444;">
-              <i class="fas fa-car" style="font-size: 40px; color: #1a1a1a; margin-bottom: 10px;"></i>
-              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #333;">Vehicle Storage Zone</span>
+              <i class="fas fa-car" style="font-size: 64px; color: #1a1a1a; margin-bottom: 15px;"></i>
+              <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: #333; font-weight: 600;">Vehicle Storage Zone</span>
             </div>
           </div>
           
