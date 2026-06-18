@@ -75,16 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Add event listeners to triggers
-  // 1. Image containers
-  document.querySelectorAll('.card-image-container.has-3d').forEach(container => {
-    container.addEventListener('click', (e) => {
-      const sketchfabId = container.getAttribute('data-sketchfab-id');
-      const carName = container.getAttribute('data-car-name');
-      openModal(sketchfabId, carName);
-    });
-  });
-
-  // 2. Action CTA "Explorar" buttons
+  // 1. Action CTA "Explorar" buttons and hover 3D overlays
   document.querySelectorAll('.trigger-3d-modal').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();

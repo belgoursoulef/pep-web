@@ -11,6 +11,7 @@
   <script src="{{ url_for('static', filename='js/pixel-anchor-observer.js') }}"></script>
   <script src="{{ url_for('static', filename='js/catalog-filter.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/rss_parser.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/3d-demo.js') }}" defer></script>
 </head>
 
 <body>
@@ -237,13 +238,14 @@
               </div>
 
               <!-- Image Container -->
-              <div class="card-image-container {% if car.sketchfab_id %}has-3d{% endif %}" {% if car.sketchfab_id %}
-                data-sketchfab-id="{{ car.sketchfab_id }}" data-car-name="{{ car.brand }} {{ car.name }}" {% endif %}>
-                <img class="card-car-image" src="{{ url_for('static', filename=car.image_path) }}"
-                  alt="{{ car.brand }} {{ car.name }}">
+              <div class="card-image-container {% if car.sketchfab_id %}has-3d{% endif %}">
+                <a href="{{ url_for('car_detail', car_id=car.id) }}" style="display: block;">
+                  <img class="card-car-image" src="{{ url_for('static', filename=car.image_path) }}"
+                    alt="{{ car.brand }} {{ car.name }}">
+                </a>
                 {% if car.sketchfab_id %}
                 <div class="hover-3d-overlay">
-                  <div class="overlay-3d-badge">
+                  <div class="overlay-3d-badge trigger-3d-modal" data-sketchfab-id="{{ car.sketchfab_id }}" data-car-name="{{ car.brand }} {{ car.name }}">
                     <i class="fas fa-cube"></i>
                     <span>{{ _("View in 3D") }}</span>
                   </div>
