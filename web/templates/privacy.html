@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>{{ _('Privacy Policy') }} - {{ _('Car Horizon - Official Website') }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}?v=1.0.3">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}?v=1.0.3">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" defer></script>
+</head>
+
+<body class="admin-body">
+  <header class="admin-header">
+    <div class="admin-header-title">
+      <a href="{{ url_for('index') }}" style="text-decoration: none; color: inherit;">
+        CAR<span style="font-weight: 800; color: var(--blue);">HORIZON</span>
+      </a>
+      <span style="color: var(--disabled-black); font-size: 14px; font-weight: 300; margin-left: 20px;">
+        {{ _('Privacy Policy') }}
+      </span>
+    </div>
+    <a href="{{ url_for('index') }}#models-section" class="logout-btn">
+      <i class="fas fa-arrow-left"></i> {{ _('Back to models') }}
+    </a>
+  </header>
+
+  <main class="admin-content" style="display: block; max-width: 800px; margin: 40px auto; padding: 0 20px;">
+    <section class="admin-table-card" style="padding: 40px; line-height: 1.6;">
+      {% if current_lang == 'fr' %}
+      <h1 style="font-size: 32px; font-weight: 300; border-left: 3px solid var(--blue); padding-left: 15px; margin-bottom: 30px;">POLITIQUE DE CONFIDENTIALITÉ</h1>
+      
+      <p style="margin-bottom: 20px; color: var(--disabled-black);">Dernière mise à jour : 18 Juin 2026</p>
+      
+      <h3 style="color: var(--white); margin-top: 30px; margin-bottom: 10px;">1. Contexte du projet</h3>
+      <p style="color: var(--disabled-black); margin-bottom: 20px;">
+        Ce site Web a été développé dans un but pédagogique dans le cadre des projets **SAE 2.1 & 2.4 (Projet Pépinière)**. Les données collectées et traitées le sont uniquement à des fins de simulation et d'évaluation académique.
+      </p>
+
+      <h3 style="color: var(--white); margin-top: 30px; margin-bottom: 10px;">2. Données collectées</h3>
+      <p style="color: var(--disabled-black); margin-bottom: 10px;">Nous collectons et traitons deux types de données :</p>
+      <ul style="color: var(--disabled-black); margin-left: 20px; margin-bottom: 20px; list-style-type: square;">
+        <li style="margin-bottom: 8px;"><strong>Journaux de contrôle d'accès :</strong> L'identifiant du badge des employés scannés (ex: <code>EMP001</code>), le nom complet, le département, le statut d'accès (Autorisé/Refusé), et l'heure du passage.</li>
+        <li style="margin-bottom: 8px;"><strong>Données de session technique :</strong> Langue préférée (cookie de session) et statut de connexion de l'administrateur.</li>
+      </ul>
+
+      <h3 style="color: var(--white); margin-top: 30px; margin-bottom: 10px;">3. Utilisation des données</h3>
+      <p style="color: var(--disabled-black); margin-bottom: 20px;">
+        Les journaux d'accès physiques et les logs d'intrusion de mouvement sont uniquement insérés dans la base de données MySQL locale et affichés sur le Tableau de bord de surveillance en direct. Aucune donnée n'est partagée avec des tiers ou des partenaires commerciaux.
+      </p>
+
+      <h3 style="color: var(--white); margin-top: 30px; margin-bottom: 10px;">4. Droits des utilisateurs</h3>
+      <p style="color: var(--disabled-black); margin-bottom: 20px;">
+        Conformément aux directives du RGPD appliquées aux projets universitaires, tout étudiant ou membre du personnel dont le badge est utilisé dans la base de données de test dispose d'un droit d'accès et de suppression de ses données sur simple demande auprès de l'équipe projet.
+      </p>
+      
+      {% else %}
+      <h1 style="font-size: 32px; font-weight: 300; border-left: 3px solid var(--blue); padding-left: 15px; margin-bottom: 30px;">PRIVACY POLICY</h1>
+      
+      <p style="margin-bottom: 20px; color: var(--disabled-black);">Last updated: June 18, 2026</p>
+      
+      <h3 style="color: var(--white); margin-top: 30px; margin-bottom: 10px;">1. Project Context</h3>
+      <p style="color: var(--disabled-black); margin-bottom: 20px;">
+        This website was built for educational purposes as part of the **SAE 2.1 & 2.4 Pépinière project** curriculum. All collected and processed data serves purely simulated and academic evaluation goals.
+      </p>
+
+      <h3 style="color: var(--white); margin-top: 30px; margin-bottom: 10px;">2. Data We Collect</h3>
+      <p style="color: var(--disabled-black); margin-bottom: 10px;">We collect and process two categories of data:</p>
+      <ul style="color: var(--disabled-black); margin-left: 20px; margin-bottom: 20px; list-style-type: square;">
+        <li style="margin-bottom: 8px;"><strong>Access Control Logs:</strong> Scanned employee badge ID (e.g., <code>EMP001</code>), full name, department, authorization status (Granted/Denied), and access timestamps.</li>
+        <li style="margin-bottom: 8px;"><strong>Technical Session Data:</strong> User language preference (stored in session cookies) and administrator login status.</li>
+      </ul>
+
+      <h3 style="color: var(--white); margin-top: 30px; margin-bottom: 10px;">3. Data Usage</h3>
+      <p style="color: var(--disabled-black); margin-bottom: 20px;">
+        Access logs and movement intrusion logs are stored locally in the MySQL database and displayed inside the live Security & Monitoring panel. No data is shared with third parties or external commercial services.
+      </p>
+
+      <h3 style="color: var(--white); margin-top: 30px; margin-bottom: 10px;">4. User Rights</h3>
+      <p style="color: var(--disabled-black); margin-bottom: 20px;">
+        In compliance with GDPR guidelines applied to academic settings, any student or staff member whose badge ID is represented in the test database has the right to access and request deletion of their records by contacting the development team.
+      </p>
+      {% endif %}
+    </section>
+  </main>
+
+  <footer class="footer-minimal" style="background: #111; border-top: 1px solid rgba(255,255,255,0.05); padding: 20px 0; margin-top: auto;">
+    <div class="main-wrapper footer-minimal-wrapper" style="display: flex; justify-content: space-between; max-width: 800px; margin: 0 auto; padding: 0 20px;">
+      <p class="copy" style="color: var(--disabled-black); font-size: 13px;">© Car Horizon 2026</p>
+      <p style="color: var(--disabled-black); font-size: 13px;">SAE 2.1 & 2.4 - Pépinière Project</p>
+    </div>
+  </footer>
+</body>
+
+</html>

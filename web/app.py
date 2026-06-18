@@ -1,5 +1,8 @@
 import os
 import time
+import datetime
+import threading
+import cv2
 import mysql.connector
 from mysql.connector import Error
 from flask import Flask, render_template, request, session, redirect, url_for
@@ -515,6 +518,179 @@ def simulate_log():
             
     return redirect(url_for('admin_monitoring'))
 
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/legal')
+def legal():
+    return render_template('legal.html')
+
+def insert_device_log(device_name, log_level, message):
+    """Insère un log d'événement dans la base de données de manière thread-safe."""
+    connection = None
+    cursor = None
+    try:
+        connection = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
+        if connection.is_connected():
+            cursor = connection.cursor()
+            cursor.execute(
+                "INSERT INTO device_logs (device_name, log_level, message) VALUES (%s, %s, %s)",
+                (device_name, log_level, message)
+            )
+            connection.commit()
+    except Error as e:
+        print(f"Error logging to DB in thread: {e}")
+    finally:
+        if cursor:
+            cursor.close()
+        if connection and connection.is_connected():
+            connection.close()
+
+def run_badge_scanner():
+    """Tâche de fond pour scanner les badges/QR codes depuis la caméra."""
+    # Base de données locale de tes 5 employés autorisés
+    EMPLOYEES = {
+        "EMP001": {"nom": "BELGOUR", "prenom": "Aicha Soulef", "service": "IT"},
+        "EMP002": {"nom": "ROLIN", "prenom": "Tom", "service": "Production"},
+        "EMP003": {"nom": "Balde", "prenom": "Mamadou", "service": "Administratif"},
+        "EMP004": {"nom": "Diahouila", "prenom": "Ferancel Iverson", "service": "Production"},
+        "EMP005": {"nom": "Jacaton", "prenom": "Paul", "service": "IT"}
+    }
+
+    camera_url = "rtsp://admin:Vivotek29@192.168.32.98/live.sdp"
+    cap = cv2.VideoCapture(camera_url)
+    
+    qr_detector = cv2.QRCodeDetector()
+    dernier_badge = None
+    temps_dernier_scan = 0
+
+    print("=== Background Badge Scanner thread started ===")
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            # Reconnection en cas de perte du flux RTSP
+            time.sleep(5)
+            cap = cv2.VideoCapture(camera_url)
+            continue
+
+        data, bbox, _ = qr_detector.detectAndDecode(frame)
+
+        if data:
+            temps_actuel = time.time()
+            if data != dernier_badge or (temps_actuel - temps_dernier_scan > 3):
+                dernier_badge = data
+                temps_dernier_scan = temps_actuel
+                horodatage = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                
+                if data in EMPLOYEES:
+                    emp = EMPLOYEES[data]
+                    statut = "AUTORISE"
+                    db_message = f"Access GRANTED - {emp['prenom']} {emp['nom']} ({emp['service']})"
+                    log_level = "INFO"
+                else:
+                    statut = "REFUSE"
+                    db_message = f"Access DENIED - Unknown badge scanned: {data}"
+                    log_level = "WARNING"
+
+                log = f"[{horodatage}] {statut} : {db_message}"
+                print(log)
+                
+                # Envoi du log à la base de données
+                insert_device_log("Camera 1 (Entrance)", log_level, db_message)
+                
+                # Enregistrement dans le fichier journal local
+                try:
+                    with open("historique_acces.csv", "a", encoding="utf-8") as f:
+                        f.write(f"{horodatage},{data},{statut}\n")
+                except Exception as e:
+                    print(f"Error writing access CSV: {e}")
+
+        # Pour éviter le crash si aucun affichage GUI n'est disponible (ex: conteneur Docker)
+        try:
+            cv2.imshow("Controle Acces - Caméra Entrée", frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        except Exception:
+            time.sleep(0.03)
+
+    cap.release()
+    try:
+        cv2.destroyAllWindows()
+    except Exception:
+        pass
+
+def run_intrusion_alarm():
+    """Tâche de fond pour la détection d'intrusion nocturne sur la caméra 2."""
+    url_cam2 = "rtsp://admin:Vivotek29@192.168.32.99/live.sdp"
+    HEURE_DEBUT_INTERDIT = 20
+    HEURE_FIN_INTERDIT = 7
+
+    cap2 = cv2.VideoCapture(url_cam2)
+    fgbg = cv2.createBackgroundSubtractorMOG2()
+
+    print("=== Background Intrusion Alarm thread started ===")
+
+    def est_en_horaire_interdit():
+        heure_actuelle = datetime.datetime.now().hour
+        return heure_actuelle >= HEURE_DEBUT_INTERDIT or heure_actuelle < HEURE_FIN_INTERDIT
+
+    while True:
+        ret2, frame2 = cap2.read()
+        if not ret2:
+            time.sleep(5)
+            cap2 = cv2.VideoCapture(url_cam2)
+            continue
+
+        # Détection de mouvement
+        fgmask = fgbg.apply(frame2)
+        _, thresh = cv2.threshold(fgmask, 200, 255, cv2.THRESH_BINARY)
+        
+        # Si le mouvement est significatif
+        if cv2.countNonZero(thresh) > 5000:
+            if est_en_horaire_interdit():
+                horodatage = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                message = f"[{horodatage}] ALERTE INTRUSION"
+                print(message)
+                
+                # Envoi du log à la base de données
+                insert_device_log("Camera 2 (Garage)", "ALERT", "Intrusion detected - Motion detected during off-hours!")
+                
+                # Enregistrement dans le fichier journal local
+                try:
+                    with open("historique_intrusion.csv", "a", encoding="utf-8") as f:
+                        f.write(f"{horodatage},INTRUSION\n")
+                except Exception as e:
+                    print(f"Error writing intrusion CSV: {e}")
+
+        # Pour éviter le crash si aucun affichage GUI n'est disponible (ex: conteneur Docker)
+        try:
+            cv2.imshow("Surveillance 360 - Alerte Intrusion", frame2)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        except Exception:
+            time.sleep(0.03)
+
+    cap2.release()
+    try:
+        cv2.destroyAllWindows()
+    except Exception:
+        pass
+
 if __name__ == '__main__':
+    # Start threads in background
+    # Only run them if it's the main Werkzeug thread (to prevent double threads on auto-reload)
+    if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or not app.debug:
+        t1 = threading.Thread(target=run_badge_scanner, daemon=True)
+        t2 = threading.Thread(target=run_intrusion_alarm, daemon=True)
+        t1.start()
+        t2.start()
+
     app.run(host='0.0.0.0', port=5000, debug=True)
 
