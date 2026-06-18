@@ -5,7 +5,7 @@ import threading
 import cv2
 import mysql.connector
 from mysql.connector import Error
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -526,6 +526,36 @@ def privacy():
 def legal():
     return render_template('legal.html')
 
+camera_frames = {
+    "Camera 1 (Entrance)": None,
+    "Camera 2 (Garage)": None
+}
+
+def gen_video_feed(camera_name):
+    """Générateur pour le flux MJPEG d'une caméra."""
+    while True:
+        frame_bytes = camera_frames.get(camera_name)
+        if frame_bytes is not None:
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+        else:
+            time.sleep(0.1)
+        time.sleep(0.03)
+
+@app.route('/video_feed/1')
+def video_feed_1():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('login'))
+    return Response(gen_video_feed("Camera 1 (Entrance)"),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/video_feed/2')
+def video_feed_2():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('login'))
+    return Response(gen_video_feed("Camera 2 (Garage)"),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
 def insert_device_log(device_name, log_level, message):
     """Insère un log d'événement dans la base de données de manière thread-safe."""
     connection = None
@@ -579,6 +609,11 @@ def run_badge_scanner():
             time.sleep(5)
             cap = cv2.VideoCapture(camera_url)
             continue
+
+        # Stockage de la frame encodée pour le flux web MJPEG
+        ret_jpg, jpeg = cv2.imencode('.jpg', frame)
+        if ret_jpg:
+            camera_frames["Camera 1 (Entrance)"] = jpeg.tobytes()
 
         data, bbox, _ = qr_detector.detectAndDecode(frame)
 
@@ -647,6 +682,11 @@ def run_intrusion_alarm():
             time.sleep(5)
             cap2 = cv2.VideoCapture(url_cam2)
             continue
+
+        # Stockage de la frame encodée pour le flux web MJPEG
+        ret_jpg, jpeg = cv2.imencode('.jpg', frame2)
+        if ret_jpg:
+            camera_frames["Camera 2 (Garage)"] = jpeg.tobytes()
 
         # Détection de mouvement
         fgmask = fgbg.apply(frame2)

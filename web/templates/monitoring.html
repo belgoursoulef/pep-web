@@ -53,6 +53,8 @@
                 <div style="font-weight: 600;">1080P @ 30FPS</div>
               </div>
             </div>
+            <!-- Live MJPEG Stream -->
+            <img src="{{ url_for('video_feed_1') }}" onerror="this.style.display='none';" onload="this.style.display='block';" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2;">
             <!-- Mock static interference and scanlines -->
             <div class="cctv-scanline"></div>
             <div class="cctv-static"></div>
@@ -76,6 +78,8 @@
                 <div style="font-weight: 600;">1080P @ 30FPS</div>
               </div>
             </div>
+            <!-- Live MJPEG Stream -->
+            <img src="{{ url_for('video_feed_2') }}" onerror="this.style.display='none';" onload="this.style.display='block';" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2;">
             <!-- Mock static interference and scanlines -->
             <div class="cctv-scanline" style="animation-delay: 2s;"></div>
             <div class="cctv-static" style="opacity: 0.04;"></div>
