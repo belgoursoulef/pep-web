@@ -80,6 +80,9 @@
         <div class="sort-container">
           <select class="sort-select">
             <option value="default">{{ _("Default sorting") }}</option>
+            <option value="price-low-high">{{ _("Price: Low to High") }}</option>
+            <option value="price-high-low">{{ _("Price: High to Low") }}</option>
+            <option value="color">{{ _("Color: A-Z") }}</option>
           </select>
         </div>
       </div>
@@ -213,7 +216,7 @@
 
           <div class="models-view">
             {% for car in cars %}
-            <article data-brand="{{ car.brand }}" data-category="{{ car.category }}" data-fuel="{{ car.fuel_type }}" {%
+            <article data-id="{{ car.id }}" data-color="{{ car.color|default('') }}" data-brand="{{ car.brand }}" data-category="{{ car.category }}" data-fuel="{{ car.fuel_type }}" {%
               if car.sketchfab_id %} data-sketchfab-id="{{ car.sketchfab_id }}" {% endif %}>
               <!-- Badges -->
               <div class="card-badges">

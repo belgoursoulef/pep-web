@@ -114,4 +114,46 @@ document.addEventListener('DOMContentLoaded', () => {
     card.style.opacity = '1';
     card.style.transform = 'scale(1)';
   });
+
+  // Sorting functionality
+  const sortSelect = document.querySelector('.sort-select');
+  const modelsView = document.querySelector('.models-view');
+
+  if (sortSelect && modelsView) {
+    sortSelect.addEventListener('change', () => {
+      const selectedValue = sortSelect.value;
+      const cardsArray = Array.from(carCards);
+
+      cardsArray.sort((a, b) => {
+        if (selectedValue === 'price-low-high') {
+          const priceA = getNumericPrice(a);
+          const priceB = getNumericPrice(b);
+          return priceA - priceB;
+        } else if (selectedValue === 'price-high-low') {
+          const priceA = getNumericPrice(a);
+          const priceB = getNumericPrice(b);
+          return priceB - priceA;
+        } else if (selectedValue === 'color') {
+          const colorA = (a.getAttribute('data-color') || '').toLowerCase();
+          const colorB = (b.getAttribute('data-color') || '').toLowerCase();
+          return colorA.localeCompare(colorB);
+        } else {
+          // Default sorting: by database ID
+          const idA = parseInt(a.getAttribute('data-id'), 10) || 0;
+          const idB = parseInt(b.getAttribute('data-id'), 10) || 0;
+          return idA - idB;
+        }
+      });
+
+      // Re-append sorted cards to the container
+      cardsArray.forEach(card => modelsView.appendChild(card));
+    });
+  }
+
+  function getNumericPrice(card) {
+    const priceElement = card.querySelector('.price-text');
+    const priceText = priceElement ? priceElement.innerText : '0';
+    // Remove non-digit characters to parse numeric values (e.g. $650/month -> 650, 25 000 -> 25000)
+    return parseInt(priceText.replace(/[^0-9]/g, ''), 10) || 0;
+  }
 });

@@ -25,6 +25,9 @@ UI_TRANSLATIONS = {
     "Explore the entire range": {"en": "Explore the entire range", "fr": "Explorez toute la gamme"},
     "Exclusive offers": {"en": "Exclusive offers", "fr": "Offres exclusives"},
     "Default sorting": {"en": "Default sorting", "fr": "Tri par défaut"},
+    "Price: Low to High": {"en": "Price: Low to High", "fr": "Prix : Du moins cher au plus cher"},
+    "Price: High to Low": {"en": "Price: High to Low", "fr": "Prix : Du plus cher au moins cher"},
+    "Color: A-Z": {"en": "Color: A-Z", "fr": "Couleur : A-Z"},
     "LEGENDARY HORIZONS": {"en": "LEGENDARY HORIZONS", "fr": "HORIZONS LÉGENDAIRES"},
     "Experience the ultimate collection of automotive masterpieces.": {
         "en": "Experience the ultimate collection of automotive masterpieces.",
@@ -247,13 +250,15 @@ def index():
         cursor.execute("SELECT DISTINCT brand FROM cars ORDER BY brand")
         brands = [row['brand'] for row in cursor.fetchall()]
         
-        # Query cars with language specific columns
+        # Query cars with language specific columns and join color spec
         query_cars = f"""
-            SELECT id, brand, category, fuel_type, name, 
-                   price_{db_lang} AS price, 
-                   lease_info_{db_lang} AS lease_info, 
-                   image_path, is_exclusive, sketchfab_id
-            FROM cars
+            SELECT c.id, c.brand, c.category, c.fuel_type, c.name, 
+                   c.price_{db_lang} AS price, 
+                   c.lease_info_{db_lang} AS lease_info, 
+                   c.image_path, c.is_exclusive, c.sketchfab_id,
+                   s.spec_value AS color
+            FROM cars c
+            LEFT JOIN car_specifications s ON c.id = s.car_id AND s.spec_title = 'Exterior Paint'
         """
         cursor.execute(query_cars)
         cars = cursor.fetchall()
