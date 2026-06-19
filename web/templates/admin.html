@@ -15,11 +15,14 @@
       <a href="{{ url_for('index') }}" style="text-decoration: none; color: inherit;">
         CAR<span style="font-weight: 800; color: var(--blue);">HORIZON</span>
       </a>
-      <span style="color: var(--disabled-black); font-size: 14px; font-weight: 300;">
-        {{ _('Admin Dashboard') }}
-      </span>
-      <a href="{{ url_for('admin_monitoring') }}" class="nav-monitor-link" style="font-size: 14px; color: var(--blue); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
-        <i class="fas fa-video"></i> {{ _('Security & Monitoring') }}
+      <a href="{{ url_for('admin_dashboard') }}" class="nav-monitor-link" style="font-size: 14px; color: var(--blue); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
+        <i class="fas fa-chart-line"></i> {{ _('Admin Dashboard') }}
+      </a>
+      <a href="{{ url_for('admin_monitoring') }}" class="nav-monitor-link" style="font-size: 14px; color: var(--disabled-black); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
+        <i class="fas fa-list-alt"></i> {{ _('System Logs') }}
+      </a>
+      <a href="{{ url_for('admin_live') }}" class="nav-monitor-link" style="font-size: 14px; color: var(--disabled-black); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
+        <i class="fas fa-video"></i> {{ _('Live Feeds') }}
       </a>
     </div>
     <a class="logout-btn" href="{{ url_for('logout') }}">

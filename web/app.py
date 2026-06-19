@@ -184,6 +184,7 @@ UI_TRANSLATIONS = {
     "Invalid credentials": {"en": "Invalid credentials", "fr": "Identifiants invalides"},
     "Security & Monitoring": {"en": "Security & Monitoring", "fr": "Sécurité & Surveillance"},
     "Live Monitoring Console": {"en": "Live Monitoring Console", "fr": "Console de Surveillance en Direct"},
+    "Live Feeds": {"en": "Live Feeds", "fr": "Flux en Direct"},
     "Back to Dashboard": {"en": "Back to Dashboard", "fr": "Retour au Tableau de Bord"},
     "Device Status": {"en": "Device Status", "fr": "Statut de l'appareil"},
     "System Logs": {"en": "System Logs", "fr": "Journaux Système"},
@@ -463,20 +464,11 @@ def admin_monitoring():
     connection = None
     cursor = None
     logs = []
-    latest_temp = "24.3"
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
         cursor.execute("SELECT id, device_name, log_level, message, DATE_FORMAT(timestamp, '%Y-%m-%d %H:%i:%s') as formatted_time FROM device_logs ORDER BY timestamp DESC LIMIT 50")
         logs = cursor.fetchall()
-        
-        cursor.execute("SELECT message FROM device_logs WHERE device_name = 'Thermal Arduino' AND message LIKE '%°C%' ORDER BY timestamp DESC LIMIT 1")
-        temp_log = cursor.fetchone()
-        if temp_log:
-            import re
-            match = re.search(r'(\d+\.\d+)°C', temp_log['message'])
-            if match:
-                latest_temp = match.group(1)
     except Error as e:
         print(f"Database error in admin monitoring: {e}")
     finally:
@@ -485,7 +477,35 @@ def admin_monitoring():
         if connection and connection.is_connected():
             connection.close()
             
-    return render_template('monitoring.html', logs=logs, latest_temp=latest_temp)
+    return render_template('monitoring.html', logs=logs)
+
+@app.route('/admin/live')
+def admin_live():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('login'))
+        
+    connection = None
+    cursor = None
+    latest_temp = "24.3"
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT message FROM device_logs WHERE device_name = 'Thermal Arduino' AND message LIKE '%°C%' ORDER BY timestamp DESC LIMIT 1")
+        temp_log = cursor.fetchone()
+        if temp_log:
+            import re
+            match = re.search(r'(\d+\.\d+)°C', temp_log['message'])
+            if match:
+                latest_temp = match.group(1)
+    except Error as e:
+        print(f"Database error in admin live: {e}")
+    finally:
+        if cursor:
+            cursor.close()
+        if connection and connection.is_connected():
+            connection.close()
+            
+    return render_template('live.html', latest_temp=latest_temp)
 
 @app.route('/admin/monitoring/simulate', methods=['POST'])
 def simulate_log():
