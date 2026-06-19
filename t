@@ -31,3 +31,13 @@
        valid_lft forever preferred_lft forever
 
 
+juin 19 13:20:40 rt-mv dhcpd[36999]: Listening on LPF/enp0s3/08:00:27:05:c3:50/192.168.32.48/28
+juin 19 13:20:40 rt-mv sh[36999]: Listening on LPF/enp0s3/08:00:27:05:c3:50/192.168.32.48/28
+juin 19 13:20:40 rt-mv sh[36999]: Sending on   LPF/enp0s3/08:00:27:05:c3:50/192.168.32.48/28
+juin 19 13:20:40 rt-mv sh[36999]: Sending on   Socket/fallback/fallback-net
+juin 19 13:20:40 rt-mv dhcpd[36999]: Sending on   LPF/enp0s3/08:00:27:05:c3:50/192.168.32.48/28
+juin 19 13:20:40 rt-mv dhcpd[36999]: Sending on   Socket/fallback/fallback-net
+juin 19 13:20:40 rt-mv dhcpd[36999]: Server starting service.
+juin 19 13:20:43 rt-mv dhcpd[36999]: DHCPDISCOVER from 00:02:d1:4b:20:f8 via 192.168.32.97: unknown network segment
+juin 19 13:20:43 rt-mv dhcpd[36999]: DHCPDISCOVER from 00:02:d1:57:4e:78 via 192.168.32.97: unknown network segment
+juin 19 13:20:46 rt-mv dhcpd[36999]: DHCPDISCOVER from 00:02:d1:57:4e:78 via 192.168.32.97: unknown network segment
