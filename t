@@ -9,11 +9,11 @@ option option-150 code 150 = ip-address;
 # --- HOST RESERVATIONS ---
 host cam-IP8166 {
   hardware ethernet 00:02:D1:4B:20:F8;
-  fixed-address 192.168.32.98;
+  fixed-address 192.168.32.114;
 }
 host cam-FE8391-V {
   hardware ethernet 00:02:D1:57:4E:78;
-  fixed-address 192.168.32.99;
+  fixed-address 192.168.32.115;
 }
 
 # --- SUBNETS ---
@@ -55,7 +55,15 @@ shared-network CAMERAS {
 
   # Subnet passerelle/switch (relay agent - 192.168.32.97)
   subnet 192.168.32.96 netmask 255.255.255.240 {
+    option routers 192.168.32.97;
+    option domain-name-servers 10.0.0.1;
+  }
+
+  # VLAN 29: CAMERAS
+  subnet 192.168.32.112 netmask 255.255.255.240 {
+    range 192.168.32.116 192.168.32.125;
+    option routers 192.168.32.113;
+    option domain-name-servers 10.0.0.1;
   }
 
 }
-
