@@ -50,13 +50,18 @@ subnet 192.168.32.80 netmask 255.255.255.240 {
   option option-150 192.168.32.82;
 }
 
-# Subnet passerelle/switch (relay agent cameras - 192.168.32.97)
-subnet 192.168.32.96 netmask 255.255.255.240 {
-}
+# VLAN 29: CAMERAS + subnet relay agent groupés
+shared-network CAMERAS {
 
-# VLAN 29: CAMERAS
-subnet 192.168.32.112 netmask 255.255.255.240 {
-  range 192.168.32.116 192.168.32.125;
-  option routers 192.168.32.113;
-  option domain-name-servers 10.0.0.1;
+  # Subnet passerelle/switch (relay agent - 192.168.32.97)
+  subnet 192.168.32.96 netmask 255.255.255.240 {
+  }
+
+  # VLAN 29: CAMERAS
+  subnet 192.168.32.112 netmask 255.255.255.240 {
+    range 192.168.32.116 192.168.32.125;
+    option routers 192.168.32.113;
+    option domain-name-servers 10.0.0.1;
+  }
+
 }
