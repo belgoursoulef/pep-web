@@ -34,20 +34,7 @@ services:
       exterior:
         ipv4_address: 192.168.32.115
 
-  camera-service:
-    build: ./camera-service
-    restart: always
-    environment:
-      - DB_HOST=db
-      - DB_USER=root
-      - DB_PASSWORD=rootpassword
-      - DB_NAME=carhorizon
-    depends_on:
-      - db
-    networks:
-      internal:
-      exterior:
-        ipv4_address: 192.168.32.116
+
 
 volumes:
   mysql_data:

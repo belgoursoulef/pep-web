@@ -455,113 +455,13 @@ def add_car():
             
     return redirect(url_for('admin_dashboard'))
 
-@app.route('/admin/monitoring')
-def admin_monitoring():
-    if not session.get('admin_logged_in'):
-        return redirect(url_for('login'))
-        
-    connection = None
-    cursor = None
-    logs = []
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT id, device_name, log_level, message, DATE_FORMAT(timestamp, '%Y-%m-%d %H:%i:%s') as formatted_time FROM device_logs ORDER BY timestamp DESC LIMIT 50")
-        logs = cursor.fetchall()
-    except Error as e:
-        print(f"Database error in admin monitoring: {e}")
-    finally:
-        if cursor:
-            cursor.close()
-        if connection and connection.is_connected():
-            connection.close()
-            
-    return render_template('monitoring.html', logs=logs)
-
-@app.route('/admin/live')
-def admin_live():
-    if not session.get('admin_logged_in'):
-        return redirect(url_for('login'))
-        
-    connection = None
-    cursor = None
-    latest_temp = "24.3"
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT message FROM device_logs WHERE device_name = 'Thermal Arduino' AND message LIKE '%°C%' ORDER BY timestamp DESC LIMIT 1")
-        temp_log = cursor.fetchone()
-        if temp_log:
-            import re
-            match = re.search(r'(\d+\.\d+)°C', temp_log['message'])
-            if match:
-                latest_temp = match.group(1)
-    except Error as e:
-        print(f"Database error in admin live: {e}")
-    finally:
-        if cursor:
-            cursor.close()
-        if connection and connection.is_connected():
-            connection.close()
-            
-    return render_template('live.html', latest_temp=latest_temp)
-
-@app.route('/admin/monitoring/simulate', methods=['POST'])
-def simulate_log():
-    if not session.get('admin_logged_in'):
-        return redirect(url_for('login'))
-        
-    device = request.form.get('device')
-    level = request.form.get('level')
-    message = request.form.get('message')
-    
-    connection = None
-    cursor = None
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor()
-        cursor.execute(
-            "INSERT INTO device_logs (device_name, log_level, message) VALUES (%s, %s, %s)",
-            (device, level, message)
-        )
-        connection.commit()
-    except Error as e:
-        print(f"Database error during log simulation: {e}")
-        if connection:
-            connection.rollback()
-    finally:
-        if cursor:
-            cursor.close()
-        if connection and connection.is_connected():
-            connection.close()
-            
-    return redirect(url_for('admin_monitoring'))
-
 @app.route('/privacy')
 def privacy():
     return render_template('privacy.html')
 
-@app.route('/video_feed/1')
-def video_feed_1():
-    if not session.get('admin_logged_in'):
-        return redirect(url_for('login'))
-    try:
-        req = requests.get('http://camera-service:5001/video_feed/1', stream=True, timeout=5)
-        return Response(req.iter_content(chunk_size=1024), content_type=req.headers.get('Content-Type'))
-    except Exception as e:
-        print(f"Error proxying feed 1: {e}")
-        return "Camera 1 unavailable", 503
-
-@app.route('/video_feed/2')
-def video_feed_2():
-    if not session.get('admin_logged_in'):
-        return redirect(url_for('login'))
-    try:
-        req = requests.get('http://camera-service:5001/video_feed/2', stream=True, timeout=5)
-        return Response(req.iter_content(chunk_size=1024), content_type=req.headers.get('Content-Type'))
-    except Exception as e:
-        print(f"Error proxying feed 2: {e}")
-        return "Camera 2 unavailable", 503
+@app.route('/legal')
+def legal():
+    return render_template('legal.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
