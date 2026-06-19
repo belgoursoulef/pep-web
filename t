@@ -3,6 +3,9 @@ default-lease-time 600;
 max-lease-time 7200;
 authoritative;
 
+# Déclaration de l'option 150 (TFTP server address - Cisco phones)
+option option-150 code 150 = ip-address;
+
 # --- HOST RESERVATIONS ---
 host cam-IP8166 {
   hardware ethernet 00:02:D1:4B:20:F8;
